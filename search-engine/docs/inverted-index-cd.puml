@@ -1,0 +1,49 @@
+@startuml
+
+interface Index{
+    + List<String> searchQuery(Query query)
+}
+
+class InvertedIndex {
+  + private final DocumentRepository documentRepository
+  + public Index buildIndex()
+}
+
+
+class IndexImpl implements Index{
+    + private final Map<String, IndexEntry> index
+    + List<String> searchQuery(Query query)
+}
+
+class Document {
+  -id: String
+  -content: String
+  +getId(): String
+  +getContent(): String
+}
+
+class IndexEntry {
+  -term: String
+  -documentIds: List<String>
+  +getTerm(): String
+  +getDocumentIds(): List<String>
+}
+
+class DocumentRepository {
+  +addDocument(document: Document): void
+  +getDocument(documentId: String): Document
+}
+
+class Query {
+  -terms: List<String>
+  +addTerm(term: String): void
+  +getTerms(): List<String>
+}
+
+
+IndexImpl *-- IndexEntry
+InvertedIndex *-- DocumentRepository
+InvertedIndex --> IndexImpl
+
+
+@enduml
